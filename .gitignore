@@ -1,0 +1,8 @@
+# Vagrant data directory
+/.vagrant/
+
+# Ansible galaxy roles
+/galaxy_roles/
+
+# Ansible retry files
+*.retry

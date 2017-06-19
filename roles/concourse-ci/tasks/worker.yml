@@ -1,0 +1,51 @@
+---
+
+- name: Create concourse work dir
+  file:
+    path: /opt/concourse/worker
+    state: directory
+    mode: 0555
+    owner: root
+    group: root
+
+- name: Install the worker key
+  copy:
+    content: "{{ concourse_worker_key }}"
+    dest: /etc/concourse/worker_key
+    mode: 0700
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+
+- name: Install the tsa host pub key
+  copy:
+    content: "{{ concourse_tsa_host_key_pub }}"
+    dest: /etc/concourse/tsa_host_key.pub
+    mode: 0700
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+
+- name: Install concourse worker sysconfig
+  template:
+    src: concourse-worker.j2
+    dest: /etc/sysconfig/concourse-worker
+    mode: 0600
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+  notify:
+    - Restart concourse-worker
+
+- name: Install concourse worker systemd config
+  copy:
+    src: concourse-worker.service
+    dest: /etc/systemd/system/concourse-worker.service
+    mode: 0444
+    owner: root
+    group: root
+  notify:
+    - Restart concourse-worker
+
+- name: Ensure concourse worker is started and enabled
+  service:
+    name: concourse-worker
+    state: started
+    enabled: true

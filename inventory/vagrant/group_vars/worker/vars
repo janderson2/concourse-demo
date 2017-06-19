@@ -1,0 +1,9 @@
+---
+
+concourse_web: false
+concourse_worker: true
+
+concourse_tsa_host: concourse.dev
+
+concourse_tsa_host_key_pub: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsq0Ri0Zi4JQdJ8iO8P1j/Wt6RWhYs843p25HRSLKn4izHC5FgJKo7xGwRBU8rXNi3qscMEy8LAVI3jPiHLTafnfzjc8NGzmEhXdJnXKP4HILJa+/oAxDAOHSFUwnIyGZ2+2kg13mphv49k8F1GmwHaOHaONnqltvq7IYBgrRIQArMYhroYgh1JgmdsULCRKBtKTOPSRBysz52Dfmo3cnkghULUdQ0lKaC8Erflu5cQ+zK8j5wgo3f7bkYwzH99Cgr36iTbBBCD36fPobw6Bj1RulIOgYuy1h3UFk0unpaKjBeNvRebjB8K4B9amQ99Uqi0bWMf13u2Bvq1d6Zk1xx
+concourse_worker_key: "{{ vault_concourse_worker_key }}"

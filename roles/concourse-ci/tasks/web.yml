@@ -1,0 +1,51 @@
+---
+
+- name: Install the session signing key
+  copy:
+    content: "{{ concourse_session_signing_key }}"
+    dest: /etc/concourse/session_signing_key
+    mode: 0700
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+
+- name: Install the tsa host key
+  copy:
+    content: "{{ concourse_tsa_host_key }}"
+    dest: /etc/concourse/tsa_host_key
+    mode: 0700
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+
+- name: Install the tsa authorised keys
+  copy:
+    content: "{{ concourse_worker_key_pub }}"
+    dest: /etc/concourse/authorized_worker_keys
+    mode: 0700
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+
+- name: Install concourse web sysconfig
+  template:
+    src: concourse-web.j2
+    dest: /etc/sysconfig/concourse-web
+    mode: 0600
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+  notify:
+    - Restart concourse-web
+
+- name: Install concourse web systemd config
+  copy:
+    src: concourse-web.service
+    dest: /etc/systemd/system/concourse-web.service
+    mode: 0444
+    owner: root
+    group: root
+  notify:
+   - Restart concourse-web
+
+- name: Ensure concourse web is started and enabled
+  service:
+    name: concourse-web
+    state: started
+    enabled: true

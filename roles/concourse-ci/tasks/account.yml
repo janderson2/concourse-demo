@@ -1,0 +1,11 @@
+---
+
+- name: Create concourse group
+  group:
+    name: "{{ concourse_group }}"
+    state: present
+
+- name: Create concourse user
+  user:
+    name: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"

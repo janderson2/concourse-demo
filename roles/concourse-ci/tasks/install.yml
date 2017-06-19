@@ -1,0 +1,25 @@
+---
+
+- name: Check currently installed version
+  command: /usr/local/bin/concourse --version
+  register: concourse_version_check
+  failed_when: false
+  changed_when: false
+  check_mode: no
+
+- name: Remove old concourse version
+  file:
+    path: /usr/local/bin/concourse
+    state: absent
+  when: concourse_version_check.stdout is defined and concourse_version_check.stdout != concourse_version
+
+- name: Install concourse
+  get_url:
+    url: "{{ concourse_binary_url }}"
+    dest: /usr/local/bin/concourse
+    mode: 0555
+    owner: root
+    group: root
+  notify:
+   - Restart concourse-web
+   - Restart concourse-worker

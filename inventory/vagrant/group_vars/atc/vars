@@ -1,0 +1,24 @@
+---
+
+concourse_web: true
+concourse_worker: false
+
+postgresql_users:
+    - name: "{{ concourse_user }}"
+      pass: "{{ concourse_user }}"
+
+postgresql_databases:
+    - name: atc
+      owner: "{{ concourse_user }}"
+
+postgresql_hba_entries:
+  - { type: local, database: all, user: postgres, auth_method: peer }
+  - { type: local, database: all, user: all, auth_method: peer }
+  - { type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: md5 }
+  - { type: host, database: all, user: all, address: '::1/128', auth_method: md5 }
+  - { type: host, database: concourse, user: concourse, address: '127.0.0.1/32', auth_method: md5 }
+  - { type: host, database: atc, user: concourse, address: '127.0.0.1/32', auth_method: md5 }
+
+concourse_session_signing_key: "{{ vault_concourse_session_signing_key }}"
+concourse_tsa_host_key: "{{ vault_concourse_tsa_host_key }}"
+concourse_worker_key_pub: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC4vtMmGAwmEaInPOYakIn1CynFVVLqbD6Q0XWnvqSb6X9ZbGKA+t7O6As2S2+7cKQZUBK8mM19wphYee67g4DSTIJL/7vXfUXi+MHoM/1yT87ff9hBVuQ+hQd8DsOLQz4TGhrPD4/F2OaY62G3IMo77BTzjWyGIOPwqUHj1v3NAIL0arYC2Jylfwemi++MjM6gxyxTSfkvbNz2JK6lJC0qExsABvnt58nP4pfvRDt8TOkf+Mk632uonaMHbPv6SD5J+v3HmxZGYMoiK+t4ga+eAMNrYXEwg2JEk2KehoEkwcE3zfjk4pO9xMqCjkfpcHvnIZ675n89nQOwqMMF0D69

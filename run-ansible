@@ -1,0 +1,9 @@
+#!/bin/bash
+
+DIR=$(cd "$(dirname "$0")" && pwd)
+
+# Install or update galaxy_roles
+ansible-galaxy install -f -r $DIR/requirements.yml || exit 1
+
+# Run playbook
+ansible-playbook "$@"

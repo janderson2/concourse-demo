@@ -1,0 +1,13 @@
+---
+
+- name: Restart concourse-web
+  service:
+    name: concourse-web
+    state: restarted
+  when: concourse_web
+
+- name: Restart concourse-worker
+  service:
+    name: concourse-w
+    state: restarted
+  when: concourse_worker

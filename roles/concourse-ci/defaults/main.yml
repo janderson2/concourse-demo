@@ -1,0 +1,15 @@
+---
+
+concourse_version: 3.2.1
+concourse_binary_url: https://github.com/concourse/concourse/releases/download/v{{ concourse_version }}/concourse_linux_amd64
+
+concourse_user: concourse
+concourse_group: concourse
+
+concourse_basic_login: concourse
+concourse_basic_pass: concourse
+
+concourse_worker: true
+concourse_web: true
+
+concourse_work_dir: /var/lib/concourse
