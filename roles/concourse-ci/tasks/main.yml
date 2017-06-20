@@ -3,14 +3,6 @@
 - name: Create the concourse account
   include: account.yml
 
-- name: Create concourse ssh directory
-  file:
-    path: /etc/concourse/.ssh
-    state: directory
-    mode: 0700
-    owner: "{{ concourse_user }}"
-    group: "{{ concourse_group }}"
-
 - name: Install concourse
   include: install.yml
 

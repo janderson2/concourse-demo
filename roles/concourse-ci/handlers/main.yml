@@ -8,6 +8,6 @@
 
 - name: Restart concourse-worker
   service:
-    name: concourse-w
+    name: concourse-worker
     state: restarted
   when: concourse_worker
