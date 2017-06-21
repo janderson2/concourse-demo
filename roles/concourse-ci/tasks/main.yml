@@ -6,6 +6,14 @@
 - name: Install concourse
   include: install.yml
 
+- name: Create directory for concourse keys
+  file:
+    path: /etc/concourse
+    state: directory
+    owner: "{{ concourse_user }}"
+    group: "{{ concourse_group }}"
+    mode: 0700
+
 - name: Configure web
   include: web.yml
   when: concourse_web

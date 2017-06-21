@@ -1,48 +1,11 @@
 ---
 
-- name: Add EPEL kernel repo gpg key
-  rpm_key:
-    key: https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
-    state: present
+- name: Get the kernel version
+  command: uname -r
+  register: kernel_version
+  changed_when: false
+  check_mode: no
 
-- name: Install EPEL kernel yum repo
-  yum:
-    name: "{{ epel_kernel_repo_url }}"
-    state: present
-
-- name: Install latest stable kernel
-  yum:
-    name: kernel-ml
-    enablerepo: elrepo-kernel
-    state: present
-  register: kernel_update
-
-- name: Set default kernel version in GRUD
-  command: bash -lc "grub2-set-default 0"
-  when: kernel_update |changed
-
-- name: Recreate kernel configuration
-  command: bash -lc "grub2-mkconfig -o /boot/grub2/grub.cfg"
-  when: kernel_update |changed
-
-- name: Rebooting ...
-  command: shutdown -r now "Reboot required for updated kernel"
-  async: 0
-  poll: 0
-  ignore_errors: true
-  when: kernel_update |changed
-
-- name: Wait for ssh port to open again
-  wait_for:
-    port: 22
-    host: "{{ inventory_hostname }}"
-    delay: 30
-    timeout: 180
-  connection: local
-  become: False
-  when: kernel_update |changed
-
-- name: Wait a little longer to make sure everything is up
-  pause:
-    seconds: 5
-  when: kernel_update |changed
+- name: Update the kernel
+  include: update.yml
+  when: kernel_version.stdout is defined and kernel_version.stdout | version_compare('3.19.0', '<')
